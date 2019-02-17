@@ -1,32 +1,24 @@
 package com.test.prediction;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.icu.text.SimpleDateFormat;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.sql.Connection;
-import java.util.Date;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,13 +29,14 @@ public class MainActivity extends AppCompatActivity {
     byte[] dataarr ;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button camButton = (Button) findViewById(R.id.btnCamera);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        sendButton = (Button) findViewById(R.id.send_but);
+        final Button camButton = findViewById(R.id.btnCamera);
+        imageView = findViewById(R.id.imageView);
+        sendButton = findViewById(R.id.send_but);
         TextView textView = findViewById(R.id.Show);
         sendButton.setEnabled(false);
 
@@ -54,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
         });
         sendButton.setOnClickListener(v -> {
 
-            Client client = new Client( "192.168.1.106", 8888 , textView, dataarr );
+
+            Client client = new Client( "34.73.106.119", 80 , textView, dataarr );
             client.execute();
+            sendButton.setEnabled(false);
         });
 
 
@@ -65,23 +60,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap =  (Bitmap) data.getExtras().get("data");
+        assert data != null;
+        Bitmap bitmap =  (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
         imageView.setImageBitmap(bitmap);
         sendButton.setBackgroundColor(Color.GREEN);
         sendButton.setEnabled(true);
 
 
-        try {     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-           bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        try {    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           Objects.requireNonNull(bitmap).compress(Bitmap.CompressFormat.JPEG, 100, baos);
             dataarr = baos.toByteArray();
             String s = dataarr.length + "";
             Log.i("length",s );
-//            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-//            String pictureFile = "ZOFTINO_" + timeStamp;
-//            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//            File image = File.createTempFile(pictureFile,  ".jpg", storageDir);
-//            image.createNewFile();
-//            Log.i("s", path);
 
 
         }catch (Exception e){

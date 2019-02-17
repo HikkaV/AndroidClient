@@ -1,31 +1,32 @@
 package com.test.prediction;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URLDecoder;
-import java.net.UnknownHostException;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+
 public class Client extends AsyncTask<Void, Void, String> {
 
 
     private String response = "";
+    @SuppressLint("StaticFieldLeak")
     private TextView textResponse;
     private byte data [];
     private String dstAddress;
     private int dstPort;
-
+    private  Socket soc=null;
     Client( String dstAddress , int dstPort,TextView textResponse, byte data []) {
 
         this.textResponse = textResponse;
@@ -34,14 +35,30 @@ public class Client extends AsyncTask<Void, Void, String> {
         this.dstPort = dstPort;
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+
+        textResponse.setText("Waiting for connection..");
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        textResponse.setText("Connected");
+    }
+
     @Override
     protected String doInBackground(Void... arg0) {
 
-        Socket soc=null;
+
 
         try {
-            soc = new Socket(dstAddress, dstPort);
 
+            soc = new Socket(dstAddress, dstPort);
+            publishProgress();
             OutputStream os = soc.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os);
             BufferedWriter bw = new BufferedWriter(osw);
@@ -55,41 +72,53 @@ public class Client extends AsyncTask<Void, Void, String> {
             try {
 
                 soc.getOutputStream().write(data, 0 ,data.length);
-                soc.close();
                 soc.getOutputStream().flush();
-
-                Log.i("s", data.length+"");
-
-                Log.i("sent", "sent image");
+                Log.i("Sent", "sent image");
             }
             catch (IOException e){
                 Log.i("Can't send data", e.getMessage());
             }
-            /*
-             * notice: inputStream.read() will block if no data return
-             */
             BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
             String msg= URLDecoder.decode(in.readLine(), "UTF-8");
-            if (msg.equals("Got image")){
-                Log.w("FUCK", "FUCK");
-                BufferedReader f= new BufferedReader(new InputStreamReader(soc.getInputStream()));
-                String o= URLDecoder.decode(f.readLine(), "UTF-8");
-                Log.i("got", o);
+            String  m [] =msg.split(" ");
+            Log.i("Got", Arrays.toString(m));
+            if (m[0].equals("Got")){
+                Log.d("Next Step", "waiting for the msg from server ");
+                return response = m[1];
              }
-            BufferedReader op = new BufferedReader(new InputStreamReader(soc.getInputStream()));
-            this.response=URLDecoder.decode(op.readLine(), "UTF-8");
 
-        } catch (Exception e) {
+        } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             response = "UnknownHostException: " + e.toString();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            response = "IOException: " + e.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (soc != null) {
+                try {
+                    soc.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
         }
-
         return response;
     }
 
     @Override
     protected void onPostExecute(String s) {
+        super.onPostExecute(s);
         textResponse.setText(s);
+        try {
+            soc.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
