@@ -116,7 +116,7 @@ public class Client extends AsyncTask<Void, Void, String> {
         textResponse.setText(s);
         try {
             soc.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
