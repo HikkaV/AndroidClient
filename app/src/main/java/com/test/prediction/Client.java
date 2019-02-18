@@ -24,16 +24,32 @@ public class Client extends AsyncTask<Void, Void, String> {
     @SuppressLint("StaticFieldLeak")
     private TextView textResponse;
     private byte data [];
-    private String dstAddress;
-    private int dstPort;
+    private String dstAddress="34.73.106.119";
+    private int dstPort=80;
     private  Socket soc=null;
-    Client( String dstAddress , int dstPort,TextView textResponse, byte data []) {
 
-        this.textResponse = textResponse;
-        this.data = data;
-        this.dstAddress = dstAddress;
+    void setDstPort(int dstPort) {
         this.dstPort = dstPort;
     }
+
+    void setDstAddress(String dstAddress) {
+        this.dstAddress=dstAddress;
+    }
+
+    void setData(byte[] data) {
+        this.data = data;
+    }
+
+    Client(TextView textResponse){
+        this.textResponse = textResponse;
+    }
+//    Client( String dstAddress , int dstPort,TextView textResponse, byte data []) {
+//
+//        this.textResponse = textResponse;
+//        this.data = data;
+//        this.dstAddress = dstAddress;
+//        this.dstPort = dstPort;
+//    }
 
     @SuppressLint("SetTextI18n")
     @Override

@@ -6,25 +6,24 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+
 import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
     ImageView imageView;
-    private final String path = Environment.getExternalStorageDirectory().getPath();
-    File file = new File(path);
     Button sendButton;
     byte[] dataarr ;
 
@@ -39,16 +38,30 @@ public class MainActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.send_but);
         TextView textView = findViewById(R.id.Show);
         sendButton.setEnabled(false);
-
+        EditText host = findViewById(R.id.host);
+        EditText port = findViewById(R.id.port);
         camButton.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, 0);
 
         });
         sendButton.setOnClickListener(v -> {
+            Client client = new Client(textView);
+            client.setData(dataarr);
+            String host_ = host.getText().toString();
+            if(!host_.equals("")){
+                Log.d("value of host", host_);
+                client.setDstAddress(host_);
+            }
+
+            String port_ = port.getText().toString();
+            if (!port_.equals("")){
+                Log.d("value of port", port_);
+                client.setDstPort(Integer.parseInt(port_));
+            }
 
 
-            Client client = new Client( "34.73.106.119", 80 , textView, dataarr );
+
             client.execute();
             sendButton.setEnabled(false);
         });
