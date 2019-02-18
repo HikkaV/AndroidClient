@@ -9,20 +9,22 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="268dp"
-        android:layout_height="339dp"
-        android:layout_marginTop="56dp"
+        android:layout_height="335dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="9"
-        app:layout_constraintBottom_toTopOf="@+id/btnCamera"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.451" />
+        app:layout_constraintVertical_bias="0.309" />
 
     <Button
         android:id="@+id/btnCamera"
         android:layout_width="184dp"
         android:layout_height="51dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
         android:layout_weight='1'
         android:background="@android:color/holo_red_dark"
@@ -31,18 +33,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/send_but"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Show"
+        app:layout_constraintVertical_bias="0.636" />
 
     <Button
         android:id="@+id/send_but"
         android:layout_width="195dp"
         android:layout_height="55dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
         android:text="SEND"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCamera" />
+        app:layout_constraintStart_toEndOf="@+id/btnCamera"
+        app:layout_constraintTop_toBottomOf="@+id/Show"
+        app:layout_constraintVertical_bias="0.586" />
 
     <TextView
         android:id="@+id/Show"
@@ -54,10 +61,51 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.136" />
+
+    <EditText
+        android:id="@+id/host"
+        android:layout_width="235dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/host"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.472"
+        tools:targetApi="o"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/port"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/port"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.974"
+        app:layout_constraintStart_toEndOf="@+id/host"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.472"
+        tools:targetApi="o"
+        android:autofillHints="" />
 
 
 </android.support.constraint.ConstraintLayout>
