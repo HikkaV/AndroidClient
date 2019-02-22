@@ -74,7 +74,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
-        Bitmap bitmap =  (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+        Bitmap bitmap;
+        try{  bitmap =  (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");}
+        catch (Exception e){
+            Log.e("error", e.getLocalizedMessage());
+            return;
+        }
         imageView.setImageBitmap(bitmap);
         sendButton.setBackgroundColor(Color.GREEN);
         sendButton.setEnabled(true);
