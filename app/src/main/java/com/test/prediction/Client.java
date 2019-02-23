@@ -43,13 +43,7 @@ public class Client extends AsyncTask<Void, Void, String> {
     Client(TextView textResponse){
         this.textResponse = textResponse;
     }
-//    Client( String dstAddress , int dstPort,TextView textResponse, byte data []) {
-//
-//        this.textResponse = textResponse;
-//        this.data = data;
-//        this.dstAddress = dstAddress;
-//        this.dstPort = dstPort;
-//    }
+
 
     @SuppressLint("SetTextI18n")
     @Override
